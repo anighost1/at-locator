@@ -8,10 +8,38 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  password      String
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  trips         Trip[]
+  userLocations UserLocation[]
+}
+
+model Trip {
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  name      String?
+  startedAt DateTime       @default(now())
+  endedAt   DateTime?
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locations UserLocation[]
+
+  @@index([userId, startedAt])
+}
+
+model UserLocation {
+  userId     Int
+  tripId     Int?
+  latitude   Decimal                              @db.Decimal(10, 8)
+  longitude  Decimal                              @db.Decimal(11, 8)
+  recordedAt DateTime                             @default(now())
+  geom       Unsupported("geography(Point,4326)")
+  user       User                                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trip       Trip?                                @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@id([userId, recordedAt])
+  @@index([tripId, recordedAt])
 }
