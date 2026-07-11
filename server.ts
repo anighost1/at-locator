@@ -5,8 +5,9 @@ import { Server } from "socket.io";
 import { initSocket } from "./config/socket.js";
 import registerLocationSocket from "./modules/location/location.socket.js";
 import { startLocationWorker } from "./modules/location/location.worker.js";
+import { socketAuth } from "./middlewares/socket.middleware.js";
+import { logger } from "./config/logger.js";
 
-startLocationWorker()
 startLocationWorker()
 
 const server = http.createServer(app);
@@ -17,8 +18,10 @@ const io = new Server(server, {
 })
 initSocket(io)
 
+io.use(socketAuth);
+
 io.on("connection", (socket) => {
-    console.log(`${socket.id} connected`);
+    logger.info(`User ID - ${socket.data.user.id} with Socket ID - ${socket.id} connected`)
     registerLocationSocket(socket);
 })
 
