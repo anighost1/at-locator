@@ -35,7 +35,7 @@ app.use(passport.initialize());
 app.use(globalLimiter);
 
 app.get("/", (_req, res) => {
-    res.send("Baby Bloom API running ");
+    res.send("AT Locator API running ");
 });
 
 app.use("/api/auth", authLimiter);

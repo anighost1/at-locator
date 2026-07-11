@@ -4,6 +4,10 @@ import { env } from "./config/env.js";
 import { Server } from "socket.io";
 import { initSocket } from "./config/socket.js";
 import registerLocationSocket from "./modules/location/location.socket.js";
+import { startLocationWorker } from "./modules/location/location.worker.js";
+
+startLocationWorker()
+startLocationWorker()
 
 const server = http.createServer(app);
 const io = new Server(server, {

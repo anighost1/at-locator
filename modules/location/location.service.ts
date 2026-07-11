@@ -1,13 +1,23 @@
 import { getIO } from "../../config/socket.js";
 
-export function updateLocation(socketId: string, payload: Record<string, any>) {
+import { addLocation } from "./location.queue.js";
+import { setLatestLocation } from "./location.cache.js";
 
-    // Save if needed
+import { LocationPayload } from "./location.types.js";
+
+export async function updateLocation(
+    socketId: string,
+    payload: LocationPayload
+) {
+
+    await setLatestLocation(payload);
+
+    await addLocation(payload);
 
     getIO()
         .to(payload.roomId)
         .emit("location-update", {
-            userId: socketId,
+            socketId,
             ...payload,
         });
 

@@ -4,14 +4,13 @@ import { updateLocation } from "./location.service.js";
 
 export default function registerLocationSocket(socket: Socket) {
 
-    socket.on("join-room", (roomId) => {
-
+    socket.on("join-room", (roomId: string) => {
         socket.join(roomId);
-
     });
 
-    socket.on("location-update", (payload) => {
-        updateLocation(socket.id, payload);
+    socket.on("location-update", async (payload) => {
+
+        await updateLocation(socket.id, payload);
 
     });
 
