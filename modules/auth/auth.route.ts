@@ -16,7 +16,12 @@ router.get(
     "/me",
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
-        res.json({ user: req.user });
+        const user: any = req.user;
+        delete user.password
+        delete user.isActive
+        delete user.createdAt
+        delete user.updatedAt
+        res.json(user);
     }
 );
 

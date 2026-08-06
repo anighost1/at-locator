@@ -30,11 +30,11 @@ model Trip {
 }
 
 model TripUser {
-  tripId Int
-  userId Int
-
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId    Int
+  userId    Int
+  createdAt DateTime @default(now())
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([tripId, userId])
   @@index([userId])
@@ -45,6 +45,9 @@ model UserLocation {
   tripId     Int?
   latitude   Decimal                              @db.Decimal(10, 8)
   longitude  Decimal                              @db.Decimal(11, 8)
+  speed      Float?
+  heading    Int?
+  accuracy   Int?
   recordedAt DateTime                             @default(now())
   geom       Unsupported("geography(Point,4326)")
   user       User                                 @relation(fields: [userId], references: [id], onDelete: Cascade)
