@@ -28,3 +28,14 @@ export const getOngoingTrip = async (req: Request, res: Response) => {
         res.status(400).json({ message: err.message });
     }
 };
+
+export const getTripList = async (req: Request, res: Response) => {
+    const user: any = req.user;
+    try {
+        const trips = await tripService.getTripList({ userId: user.id });
+        res.status(200).json(trips);
+    } catch (err: any) {
+        logger.error(`Failed to fetch trip list: ${err.message}`);
+        res.status(400).json({ message: err.message });
+    }
+}

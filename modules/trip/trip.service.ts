@@ -60,3 +60,20 @@ export const getOngoingTrip = async (data: { userId: number }) => {
         tripCode
     };
 };
+
+export const getTripList = async (data: { userId: number }) => {
+    const trips = await prisma.trip.findMany({
+        where: {
+            users: {
+                some: {
+                    userId: data?.userId,
+                }
+            }
+        },
+        orderBy: {
+            startedAt: 'desc'
+        }
+    });
+
+    return trips;
+};

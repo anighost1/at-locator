@@ -6,7 +6,8 @@ const router = Router();
 
 router.use(passport.authenticate("jwt", { session: false }))
 
-router.post("/", tripController.createTrip)
 router.get("/ongoing", tripController.getOngoingTrip)
+router.post("/", tripController.createTrip)
+router.get("/", tripController.getTripList)
 
 export default router;
