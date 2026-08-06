@@ -39,3 +39,27 @@ export const getTripList = async (req: Request, res: Response) => {
         res.status(400).json({ message: err.message });
     }
 }
+
+export const getTripSummary = async (req: Request, res: Response) => {
+    const { tripId } = req.params;
+
+    try {
+        const summary = await tripService.getTripSummary({ tripId: Number(tripId) });
+        res.status(200).json(summary);
+    } catch (err: any) {
+        logger.error(`Failed to fetch trip summary: ${err.message}`);
+        res.status(400).json({ message: err.message });
+    }
+}
+
+export const endTrip = async (req: Request, res: Response) => {
+    const { tripId } = req.params
+    const user: any = req.user;
+    try {
+        const trip = await tripService.endTrip({ tripId: Number(tripId), userId: user.id });
+        res.status(200).json(trip);
+    } catch (err: any) {
+        logger.error(`Failed to end trip: ${err.message}`);
+        res.status(400).json({ message: err.message });
+    }
+}

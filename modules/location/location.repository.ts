@@ -6,6 +6,9 @@ interface UserLocationRecord {
     latitude: number;
     longitude: number;
     recordedAt: Date;
+    speed?: number | null;
+    heading?: number | null;
+    accuracy?: number | null;
 }
 
 export async function createManyLocations(
@@ -24,7 +27,10 @@ export async function createManyLocations(
             ${location.tripId ?? "NULL"},
             ${location.latitude},
             ${location.longitude},
-            '${location.recordedAt.toISOString()}'
+            '${location.recordedAt.toISOString()}',
+            ${location.speed ?? "NULL"},
+            ${location.heading ?? "NULL"},
+            ${location.accuracy ?? "NULL"}
         )`);
 
     }
