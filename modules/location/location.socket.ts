@@ -7,6 +7,7 @@ export default function registerLocationSocket(socket: Socket) {
 
     socket.on("join-room", (roomId: string) => {
         socket.join(roomId);
+        socket.join(`trip:${roomId}`);
     });
 
     socket.on("location-update", async (payload) => {
