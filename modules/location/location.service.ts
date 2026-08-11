@@ -14,18 +14,11 @@ export async function updateLocation(
 
     await addLocation(payload);
 
-    const io = getIO();
-
-    io.to(payload.roomId).emit("location-update", {
-        socketId,
-        ...payload,
-    });
-
-    if (payload.tripId) {
-        io.to(`trip:${payload.tripId}`).emit("location-update", {
+    getIO()
+        .to(payload.roomId)
+        .emit("location-update", {
             socketId,
             ...payload,
         });
-    }
 
 }
