@@ -168,6 +168,17 @@ export const endTrip = async (data: { tripId: number, userId: number }) => {
         throw new Error("Only creator of the trip can end it.");
     }
 
+    const ongoingTripCount = await prisma.trip.count({
+        where: {
+            id: data?.tripId,
+            endedAt: null
+        }
+    })
+
+    if (ongoingTripCount < 1) {
+        throw new Error('No ongoing trip found with provided ID')
+    }
+
     const trip = await prisma.trip.update({
         where: { id: data.tripId },
         data: { endedAt: new Date() }
