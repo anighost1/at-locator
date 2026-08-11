@@ -1,5 +1,7 @@
 import { TripInput } from "./trip.types.js";
 import { prisma } from "../../lib/prisma.js";
+import { flushTripStream } from "../location/location.queue.js";
+import { logger } from "../../config/logger.js";
 
 export const createTrip = async (data: TripInput) => {
 
@@ -179,9 +181,16 @@ export const endTrip = async (data: { tripId: number, userId: number }) => {
         throw new Error('No ongoing trip found with provided ID')
     }
 
+    try {
+        await flushTripStream(data.tripId);
+    } catch (err: any) {
+        logger.error(`Error flushing redis stream for trip ${data.tripId}: ${err?.message || err}`);
+    }
+
     const trip = await prisma.trip.update({
         where: { id: data.tripId },
         data: { endedAt: new Date() }
     });
+
     return trip;
 };

@@ -42,7 +42,10 @@ export async function createManyLocations(
             "tripId",
             "latitude",
             "longitude",
-            "recordedAt"
+            "recordedAt",
+            "speed",
+            "heading",
+            "accuracy"
         )
         VALUES
         ${values.join(",")}
